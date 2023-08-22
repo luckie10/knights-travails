@@ -28,3 +28,41 @@ knightPositions.forEach((edges, node) => {
     if (knightPositions.get(moveTo)) edges.push(moveTo);
   });
 });
+
+const bfs = (from, to) => {
+  if (!from) return;
+
+  let result = null;
+  const visited = new Set();
+  let queue = [[from]];
+
+  while (queue.length && !result) {
+    const prev = queue.shift();
+    const firstKey = prev.pop();
+    const first = knightPositions.get(firstKey);
+
+    first.forEach((edge) => {
+      if (edge === to) {
+        result = [...prev, firstKey, edge];
+        console.log("Found it:", [...prev, firstKey, edge]);
+      }
+      if (!visited.has(edge)) {
+        visited.add(edge);
+        queue.push([...prev, firstKey, edge]);
+      }
+    });
+  }
+
+  return result;
+};
+
+const knightMoves = (from, to) => {
+  from = JSON.stringify(from);
+  to = JSON.stringify(to);
+
+  const result = bfs(from, to);
+  return `You made it in ${result.length - 1} moves! Here's your path:
+${result}`;
+};
+
+console.log(knightMoves([3, 3], [4, 3]));
