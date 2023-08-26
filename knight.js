@@ -32,6 +32,55 @@ const ChessSquare = ([x, y]) => {
   }
 };
 
-const square = ChessSquare([0, 0]);
-square.createKnightMoves();
-console.log(square.getKnightMoves());
+const bfs = (start, end) => {
+  if (!start || !end) return;
+
+  const startNode = ChessSquare(start);
+  const endNode = ChessSquare(end);
+  const queue = [startNode];
+
+  const discovered = new Set();
+  discovered.add(startNode.name());
+
+  const edges = new Map();
+  edges.set(startNode.name(), 0);
+
+  const predecessors = new Map();
+  predecessors.set(startNode.name(), null);
+
+  const buildPath = (end, predecessors) => {
+    const path = [];
+
+    path.push(end);
+
+    let currPredecessor = predecessors.get(end);
+    while (currPredecessor) {
+      path.push(currPredecessor);
+      currPredecessor = predecessors.get(currPredecessor);
+    }
+
+    return path.reverse();
+  };
+
+  while (queue.length) {
+    const first = queue.shift();
+
+    if (first === endNode)
+      return {
+        distance: edges.get(endNode.name()),
+        path: buildPath(endNode.name(), predecessors),
+      };
+
+    const moves = first.createKnightMoves();
+    moves.forEach((move) => {
+      if (!discovered.has(move.name())) {
+        queue.push(move);
+        discovered.add(move.name());
+        edges.set(move.name(), edges.get(first.name()) + 1);
+        predecessors.set(move.name(), first.name());
+      }
+    });
+  }
+
+  return false;
+};
