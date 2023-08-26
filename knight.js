@@ -84,3 +84,13 @@ const bfs = (start, end) => {
 
   return false;
 };
+
+const knightMoves = (start, end) => {
+  const { distance, path } = bfs(start, end);
+
+  console.log(`You made it in ${distance}!
+Here is your full path:
+${path}`);
+};
+
+export default knightMoves;
