@@ -1,11 +1,7 @@
 const chessBoard = new Map();
 
 const ChessSquare = ([x, y]) => {
-  const knightMoves = [];
-
   const name = () => `${x}, ${y}`;
-
-  const getKnightMoves = () => knightMoves;
 
   const createKnightMoves = () => {
     const moves = [
@@ -19,13 +15,10 @@ const ChessSquare = ([x, y]) => {
       [-1, -2],
     ];
 
-    moves.map((move) => {
-      const validMove = getValidKnightMove(move);
-      if (validMove) knightMoves.push(validMove);
-    });
+    return moves.map(checkMovement).filter(Boolean);
   };
 
-  const getValidKnightMove = ([moveX, moveY]) => {
+  const checkMovement = ([moveX, moveY]) => {
     const [newX, newY] = [x + moveX, y + moveY];
     if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8)
       return ChessSquare([newX, newY]);
@@ -33,7 +26,7 @@ const ChessSquare = ([x, y]) => {
 
   if (chessBoard.has(name())) return chessBoard.get(name());
   else {
-    const square = { name, getKnightMoves, createKnightMoves };
+    const square = { name, createKnightMoves };
     chessBoard.set(name(), square);
     return square;
   }
