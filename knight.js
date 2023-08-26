@@ -51,11 +51,11 @@ const bfs = (start, end) => {
   const buildPath = (end, predecessors) => {
     const path = [];
 
-    path.push(end);
+    path.push([end]);
 
     let currPredecessor = predecessors.get(end);
     while (currPredecessor) {
-      path.push(currPredecessor);
+      path.push([currPredecessor]);
       currPredecessor = predecessors.get(currPredecessor);
     }
 
@@ -89,8 +89,8 @@ const knightMoves = (start, end) => {
   const { distance, path } = bfs(start, end);
 
   console.log(`You made it in ${distance}!
-Here is your full path:
-${path}`);
+Here is your full path:`);
+  path.forEach((node) => console.log(node));
 };
 
 export default knightMoves;
